@@ -1,13 +1,19 @@
 [build]
-  command = "npm run build"
-  functions = "functions"
-  publish = "dist"
+  # Não precisa rodar build — publicamos a pasta project/ tal como está.
+  command = "echo 'No build - static site'"
+  functions = "project/functions"
+  publish = "project"
 
+# Roteia /verificar/* para a Netlify Function verificar (retorna HTML igual ao server.js)
+[[redirects]]
+  from = "/verificar/*"
+  to = "/.netlify/functions/verificar/:splat"
+  status = 200
+  force = false
+
+# Fallback SPA: serve index.html para todas as outras rotas (exceto /verificar/* acima)
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/server"
+  to = "/index.html"
   status = 200
-  force = true
-
-[build.environment]
-  NODE_VERSION = "18"
+  force = false

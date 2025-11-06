@@ -2,20 +2,125 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Consulta E-MEC - Verificação de Diplomas</title>
     <meta name="description" content="Sistema oficial de consulta e verificação de diplomas e registros acadêmicos do E-MEC. Verifique a autenticidade de diplomas de ensino superior." />
-    <meta name="keywords" content="E-MEC, diploma, verificação, ensino superior, MEC, consulta diploma, autenticidade diploma" />
-    <meta property="og:title" content="Consulta E-MEC - Verificação de Diplomas" />
-    <meta property="og:description" content="Sistema oficial de consulta e verificação de diplomas e registros acadêmicos do E-MEC" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Consulta E-MEC - Verificação de Diplomas" />
-    <meta name="twitter:description" content="Sistema oficial de consulta e verificação de diplomas e registros acadêmicos do E-MEC" />
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        width: 100%;
+        max-width: 900px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        overflow: hidden;
+      }
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+      .header .logo { font-size: 48px; margin-bottom: 10px; }
+      .header h1 { font-size: 22px; margin-bottom: 6px; }
+      .header p { opacity: 0.95; }
+      .main {
+        padding: 30px;
+      }
+      .form-row { display:flex; gap: 12px; margin-bottom: 18px; }
+      .form-row input[type="text"] {
+        flex: 1;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        font-size: 15px;
+      }
+      .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .result {
+        margin-top: 18px;
+      }
+      .card {
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        padding: 18px;
+        border-radius: 12px;
+      }
+      .label { color: #6b7280; font-size: 13px; font-weight: 700; text-transform: uppercase; }
+      .value { color: #111827; font-size: 16px; margin-top: 6px; word-break: break-word; }
+      .notfound { color: #ef4444; font-weight: 700; margin-top: 14px; }
+      .footer {
+        padding: 18px;
+        text-align: center;
+        background: #f3f4f6;
+        color: #6b7280;
+        font-size: 13px;
+      }
+      @media (max-width: 600px) {
+        .form-row { flex-direction: column; }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="container">
+      <div class="header">
+        <div class="logo">🎓</div>
+        <h1>Consulta E-MEC</h1>
+        <p>Sistema de Verificação de Diplomas</p>
+      </div>
+
+      <div class="main">
+        <div>
+          <div class="form-row">
+            <input id="busca" type="text" placeholder="Digite o código de verificação ou CPF (somente números)" autocomplete="off" />
+            <button id="btnBuscar" class="btn">Verificar</button>
+          </div>
+          <div id="mensagem" class="notfound" style="display:none;"></div>
+        </div>
+
+        <div id="resultado" class="result"></div>
+      </div>
+
+      <div class="footer">
+        Sistema E-MEC © 2024 - Ministério da Educação
+      </div>
+    </div>
+
+    <script>
+      // A página agora redireciona para /verificar/<busca> que é roteado para a function.
+      const btn = document.getElementById('btnBuscar');
+      const input = document.getElementById('busca');
+
+      function verificarDiploma() {
+        const busca = input.value.trim();
+        if (!busca) {
+          const mensagemEl = document.getElementById('mensagem');
+          mensagemEl.style.display = 'block';
+          mensagemEl.innerText = 'Digite um código ou CPF para pesquisar.';
+          return;
+        }
+        // redireciona para /verificar/<busca> — Netlify encaminhará para a function e ela retorna o HTML completo.
+        window.location.href = '/verificar/' + encodeURIComponent(busca);
+      }
+
+      btn.addEventListener('click', verificarDiploma);
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') verificarDiploma(); });
+    </script>
   </body>
 </html>
