@@ -1,0 +1,16 @@
+[build]
+  command = "echo 'No build - static site'"
+  functions = "project/functions"
+  publish = "project"
+
+[[redirects]]
+  from = "/verificar/*"
+  to = "/.netlify/functions/verificar/:splat"
+  status = 200
+  force = false
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
